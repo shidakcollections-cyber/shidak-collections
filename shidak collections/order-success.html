@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order Success</title>
+</head>
+
+<body>
+
+    <h2>Payment Successful 🎉</h2>
+    <p>Click below to confirm your order on WhatsApp.</p>
+
+    <button onclick="sendWhatsApp()">Confirm Order</button>
+
+    <script>
+        function sendWhatsApp() {
+            let message = localStorage.getItem("orderDetails");
+            let whatsappNumber = "919971406753"; // your WhatsApp number
+            window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | Shidak Collections</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f8f8;
+        }
+
+        .checkout-container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .checkout-container h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .order-summary {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .qr-box {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .qr-box img {
+            width: 200px;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #000;
+        }
+
+        @media(max-width:768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="checkout-container">
+
+        <!-- LEFT: FORM -->
+        <div>
+            <h2>Billing Details</h2>
+
+            <form id="checkoutForm">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="tel" id="phone" placeholder="Mobile Number" required>
+                <input type="text" id="address" placeholder="Full Address" required>
+                <input type="text" id="state" placeholder="State" required>
+                <input type="text" id="district" placeholder="District" required>
+                <input type="text" id="pincode" placeholder="PIN Code" required>
+
+                <button type="submit">Proceed to Payment</button>
+            </form>
+        </div>
+
+        <!-- RIGHT: ORDER SUMMARY -->
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+
+            <p><strong>Product:</strong> <span id="productName"></span></p>
+            <p><strong>Price:</strong> ₹<span id="productPrice"></span></p>
+            <p class="order-id">Order ID: <span id="orderId"></span></p>
+
+            <div class="qr-box">
+                <h3>Scan & Pay via UPI</h3>
+                <img src="your-qr-code.png" alt="UPI QR Code">
+                <p>After payment click confirm below</p>
+                <button onclick="confirmOrder()">I Have Paid</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        // Get product data
+        let productName = localStorage.getItem("buyProductName");
+        let productPrice = localStorage.getItem("buyProductPrice");
+
+        // Generate automatic order ID
+        let orderID = "SHK" + Math.floor(100000 + Math.random() * 900000);
+
+        document.getElementById("productName").innerText = productName;
+        document.getElementById("productPrice").innerText = productPrice;
+        document.getElementById("orderId").innerText = orderID;
+
+        // Save order ID
+        localStorage.setItem("orderID", orderID);
+
+        document.getElementById("checkoutForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert("Please complete payment by scanning QR code.");
+        });
+
+        function confirmOrder() {
+
+            let name = document.getElementById("name").value;
+            let phone = document.getElementById("phone").value;
+            let address = document.getElementById("address").value;
+            let state = document.getElementById("state").value;
+            let district = document.getElementById("district").value;
+            let pincode = document.getElementById("pincode").value;
+
+            let message = `New Paid Order - Shidak Collections%0A%0A`
+                + `Order ID: ${orderID}%0A`
+                + `Product: ${productName}%0A`
+                + `Price: ₹${productPrice}%0A%0A`
+                + `Customer: ${name}%0A`
+                + `Phone: ${phone}%0A`
+                + `Address: ${address}, ${district}, ${state} - ${pincode}%0A`
+                + `Payment: UPI (Paid via QR)`;
+
+            let whatsappNumber = "919971406753";
+
+            window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");
+        }
+
+    </script>
+
+</body>
+
+</html>
